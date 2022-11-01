@@ -1,6 +1,14 @@
 import Fastify from 'fastify';
 import { PrismaClient } from '@prisma/client';
 import cors from '@fastify/cors';
+import { z, ZodError } from 'zod';
+import ShortUniqueId from 'short-unique-id';
+
+interface ErrorResponse {
+  status: number;
+  type: string;
+  message: string;
+}
 
 const prisma = new PrismaClient({
   log: ['query'],
@@ -15,8 +23,83 @@ async function bootstrap() {
     origin: true,
   });
 
+  fastify.get('/users', async () => {
+    const users = await prisma.user.findMany();
+
+    return { users };
+  });
+
+  fastify.get('/users/count', async () => {
+    const count = await prisma.user.count();
+
+    return { count };
+  });
+
+  fastify.post('/pools', async (request, reply) => {
+    try {
+      const createPoolBody = z.object({
+        title: z.string().min(3),
+        ownerId: z.string().cuid(),
+      });
+      const { title, ownerId } = createPoolBody.parse(request.body);
+
+      const existUser = await prisma.user.findUnique({
+        where: {
+          id: ownerId,
+        },
+      });
+
+      if (existUser === null) {
+        const errorResponse: ErrorResponse = {
+          status: 400,
+          type: 'Bad Request',
+          message: 'Informed owner not found',
+        };
+        return reply.status(400).send(errorResponse);
+      }
+
+      const generateCode = new ShortUniqueId({ length: 6 });
+      const code = String(generateCode()).toUpperCase();
+
+      await prisma.pool.create({
+        data: {
+          title,
+          code,
+          ownerId,
+        },
+      });
+
+      return reply.status(201).send({ code });
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return reply.status(400).send(error.message);
+      } else {
+        console.error(error);
+        return reply.status(500);
+      }
+    }
+  });
+
+  fastify.get('/pools', async () => {
+    const pools = await prisma.pool.findMany();
+
+    return { pools };
+  });
+
   fastify.get('/pools/count', async () => {
     const count = await prisma.pool.count();
+
+    return { count };
+  });
+
+  fastify.get('/guesses', async () => {
+    const guesses = await prisma.guess.findMany();
+
+    return { guesses };
+  });
+
+  fastify.get('/guesses/count', async () => {
+    const count = await prisma.guess.count();
 
     return { count };
   });

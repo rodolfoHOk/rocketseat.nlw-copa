@@ -17,3 +17,8 @@
 - Instalando o prisma erd generator e mermaid cli: npm i prisma-erd-generator @mermaid-js/mermaid-cli -D
 - Gerando ERD: npx prisma generate
 - Instalando o fastify cors: npm i @fastify/cors
+- Popular o banco de dados: npx prisma db seed
+
+## ERD
+
+![ERD](prisma/ERD.svg)
