@@ -18,7 +18,3 @@
 ## Links úteis
 
 - 1: https://docs.nativebase.io/install-expo
-
-####
-
-- PlayStation
