@@ -2,7 +2,12 @@
 
 > Evento NLW Copa da Rocketseat - Projeto do front-end WEB
 
-## Tecnologias
+## Principais Tecnologias
+
+- Typescript
+- Next Js
+- React Js
+- Tailwind Css
 
 ### Bibliotecas adicionais
 
@@ -20,5 +25,3 @@
 ## Links úteis:
 
 - 1: https://tailwindcss.com/docs/installation/using-postcss
-
-#### 1:38:58

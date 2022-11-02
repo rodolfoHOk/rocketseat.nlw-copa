@@ -1,6 +1,22 @@
 # NLW Copa - Mobile
 
-> Evento NLW Copa da Rocketseat - Projeto do back-end
+> Evento NLW Copa da Rocketseat - Projeto do back-
+
+## Principais Tecnologias
+
+- Typescript
+- Expo
+- React Native
+- Native Base
+- OAuth2
+
+### Bibliotecas adicionais
+
+- @expo-google-fonts/roboto
+- react-native-svg-transformer
+- expo-auth-session
+- expo-web-browser
+- react-native-dotenv
 
 ## Guia
 
@@ -18,5 +34,7 @@
 ## Links úteis
 
 - 1: https://docs.nativebase.io/install-expo
+- 2: https://docs.expo.dev/versions/latest/sdk/auth-session
+- 3: https://docs.expo.dev/versions/latest/sdk/webbrowser
 
 #### PlayStation, Comprometimento
