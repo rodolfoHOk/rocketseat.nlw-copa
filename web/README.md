@@ -2,6 +2,14 @@
 
 > Evento NLW Copa da Rocketseat - Projeto do front-end WEB
 
+## Tecnologias
+
+### Bibliotecas adicionais
+
+- axios
+- @radix-ui/react-toast
+- phosphor-react
+
 ## Guia
 
 - Iniciando um projeto Next.js: npx create-next-app@latest --use-npm

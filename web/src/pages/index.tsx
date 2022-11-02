@@ -1,11 +1,12 @@
-import { GetServerSideProps, GetStaticProps } from 'next';
+import { GetStaticProps } from 'next';
 import Image from 'next/image';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 import appPreviewImage from '../assets/app-nlw-copa-preview.png';
 import logoImage from '../assets/logo.svg';
 import usersAvatarImage from '../assets/users-avatar-example.png';
 import iconCheckImage from '../assets/icon-check.svg';
 import { api } from '../lib/axios';
+import { Toast } from '../components/Toast';
 
 interface HomeProps {
   poolCount: number;
@@ -14,6 +15,9 @@ interface HomeProps {
 }
 
 export default function Home(props: HomeProps) {
+  const createdRef = useRef<{ publish: () => void }>();
+  const errorRef = useRef<{ publish: () => void }>();
+
   const [poolTitle, setPoolTitle] = useState('');
 
   async function createPool(event: FormEvent<HTMLFormElement>) {
@@ -28,14 +32,12 @@ export default function Home(props: HomeProps) {
       const { code } = response.data;
       await navigator.clipboard.writeText(code);
 
-      alert(
-        'Bolão criado com sucesso, o código do bolão, para ser compartilhado, foi copiado para a área de transferência.'
-      );
+      createdRef.current?.publish();
 
       setPoolTitle('');
     } catch (error) {
       console.error(error);
-      alert('Falha ao criar o bolão, tente novamente');
+      errorRef.current?.publish();
     }
   }
 
@@ -106,6 +108,20 @@ export default function Home(props: HomeProps) {
         src={appPreviewImage}
         alt="Dois celulares exibindo uma prévia da aplicação móvel da NLW Copa"
         quality={100}
+      />
+
+      <Toast
+        ref={createdRef}
+        variant="success"
+        title="Sucesso"
+        description="Bolão criado com sucesso"
+      />
+
+      <Toast
+        ref={errorRef}
+        variant="error"
+        title="Erro"
+        description="Falha ao criar o bolão, tente novamente"
       />
     </div>
   );

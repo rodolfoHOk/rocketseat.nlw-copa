@@ -27,6 +27,18 @@ module.exports = {
           700: '#E6CC32',
         },
       },
+
+      keyframes: {
+        toastInRight: {
+          '0%': { transform: 'translateX(100%)' },
+          '80%': { transform: 'translateX(-40px)' },
+          '100%': { transform: 'translateX(0)' },
+        },
+      },
+
+      animation: {
+        toastInRight: 'toastInRight 0.5s ease-in-out',
+      },
     },
   },
   plugins: [],
