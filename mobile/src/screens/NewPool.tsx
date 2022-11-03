@@ -1,6 +1,8 @@
-import { Heading, VStack } from 'native-base';
+import { Heading, Text, VStack } from 'native-base';
 import { Header } from '../components/Header';
 import Logo from '../assets/logo.svg';
+import { Input } from '../components/Input';
+import { Button } from '../components/Button';
 
 export function NewPool() {
   return (
@@ -17,8 +19,17 @@ export function NewPool() {
           my={8}
           textAlign="center"
         >
-          Crie seu próprio bolão da copa e compartilhe com amigos!
+          Crie seu próprio bolão da copa {'\n'} e compartilhe com amigos!
         </Heading>
+
+        <Input mb={2} placeholder="Qual o nome do seu bolão?" />
+
+        <Button title="Criar meu bolão" />
+
+        <Text color="gray.200" fontSize="sm" textAlign="center" px={10} mt={4}>
+          Após criar seu bolão, você receberá um código único que poderá usar
+          para convidar outras pessoas.
+        </Text>
       </VStack>
     </VStack>
   );
