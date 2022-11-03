@@ -2,6 +2,19 @@
 
 > Evento NLW Copa da Rocketseat - Projeto do back-end
 
+## Principais tecnologias
+
+- Typescript
+- Node Js
+- Fastify
+- Prisma
+- ERD (Entity Relationship Diagram)
+
+### Bibliotecas adicionais
+
+- short-unique-id
+- zod
+
 ## Guia
 
 - Iniciando um projeto Node: npm init -y

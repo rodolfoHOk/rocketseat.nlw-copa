@@ -10,7 +10,7 @@ import { Toast } from '../components/Toast';
 import { Button } from '../components/Button';
 
 interface HomeProps {
-  poolCount: number;
+  pollCount: number;
   guessCount: number;
   userCount: number;
 }
@@ -19,14 +19,14 @@ export default function Home(props: HomeProps) {
   const createdRef = useRef<{ publish: () => void }>();
   const errorRef = useRef<{ publish: () => void }>();
 
-  const [poolTitle, setPoolTitle] = useState('');
+  const [pollTitle, setPollTitle] = useState('');
 
-  async function createPool(event: FormEvent<HTMLFormElement>) {
+  async function createPoll(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     try {
-      const response = await api.post<{ code: string }>('/pools', {
-        title: poolTitle,
+      const response = await api.post<{ code: string }>('/polls', {
+        title: pollTitle,
         ownerId: 'cl9yc7mih0000hr3pja9lp1yl',
       });
 
@@ -35,7 +35,7 @@ export default function Home(props: HomeProps) {
 
       createdRef.current?.publish();
 
-      setPoolTitle('');
+      setPollTitle('');
     } catch (error) {
       console.error(error);
       errorRef.current?.publish();
@@ -60,14 +60,14 @@ export default function Home(props: HomeProps) {
           </strong>
         </div>
 
-        <form className="mt-10 flex gap-2" onSubmit={createPool}>
+        <form className="mt-10 flex gap-2" onSubmit={createPoll}>
           <input
             className="flex-1 px-6 py-4 rounded bg-gray-800 border border-gray-600 text-sm text-gray-100 placeholder:text-gray-300"
             type="text"
             required
             placeholder="Qual o nome do seu bolão?"
-            value={poolTitle}
-            onChange={(event) => setPoolTitle(event.target.value)}
+            value={pollTitle}
+            onChange={(event) => setPollTitle(event.target.value)}
           />
           <Button title="Criar meu bolão" type="submit" size="CONTENT" />
         </form>
@@ -82,7 +82,7 @@ export default function Home(props: HomeProps) {
             <Image src={iconCheckImage} alt="" />
 
             <div className="flex flex-col">
-              <span className="font-bold text-2xl">+{props.poolCount}</span>
+              <span className="font-bold text-2xl">+{props.pollCount}</span>
               <span>Bolões criados</span>
             </div>
           </div>
@@ -124,16 +124,16 @@ export default function Home(props: HomeProps) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const [poolCountResponse, guessCountResponse, userCountResponse] =
+  const [pollCountResponse, guessCountResponse, userCountResponse] =
     await Promise.all([
-      api.get<{ count: number }>('/pools/count'),
+      api.get<{ count: number }>('/polls/count'),
       api.get<{ count: number }>('/guesses/count'),
       api.get<{ count: number }>('/users/count'),
     ]);
 
   return {
     props: {
-      poolCount: poolCountResponse.data.count,
+      pollCount: pollCountResponse.data.count,
       guessCount: guessCountResponse.data.count,
       userCount: userCountResponse.data.count,
     },

@@ -35,13 +35,13 @@ async function bootstrap() {
     return { count };
   });
 
-  fastify.post('/pools', async (request, reply) => {
+  fastify.post('/polls', async (request, reply) => {
     try {
-      const createPoolBody = z.object({
+      const createPollBody = z.object({
         title: z.string().min(3),
         ownerId: z.string().cuid(),
       });
-      const { title, ownerId } = createPoolBody.parse(request.body);
+      const { title, ownerId } = createPollBody.parse(request.body);
 
       const existUser = await prisma.user.findUnique({
         where: {
@@ -61,7 +61,7 @@ async function bootstrap() {
       const generateCode = new ShortUniqueId({ length: 6 });
       const code = String(generateCode()).toUpperCase();
 
-      await prisma.pool.create({
+      await prisma.poll.create({
         data: {
           title,
           code,
@@ -80,14 +80,14 @@ async function bootstrap() {
     }
   });
 
-  fastify.get('/pools', async () => {
-    const pools = await prisma.pool.findMany();
+  fastify.get('/polls', async () => {
+    const polls = await prisma.poll.findMany();
 
-    return { pools };
+    return { polls };
   });
 
-  fastify.get('/pools/count', async () => {
-    const count = await prisma.pool.count();
+  fastify.get('/polls/count', async () => {
+    const count = await prisma.poll.count();
 
     return { count };
   });
