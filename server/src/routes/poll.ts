@@ -64,7 +64,7 @@ export async function pollRoutes(fastify: FastifyInstance) {
     return { count };
   });
 
-  fastify.get(
+  fastify.post(
     '/polls/join',
     {
       onRequest: [authenticate],
