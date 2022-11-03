@@ -35,3 +35,5 @@
 ## ERD
 
 ![ERD](prisma/ERD.svg)
+
+#### 1:04:10

@@ -7,6 +7,7 @@ async function main() {
     data: {
       name: 'John Doe',
       email: 'john.doe@gemail.com',
+      googleId: '111111111111111111111',
       avatarUrl:
         'https://raw.githubusercontent.com/rodolfoHOk/portfolio-img/main/images/avatar/joao.jpg',
     },
