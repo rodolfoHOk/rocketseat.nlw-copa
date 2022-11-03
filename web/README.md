@@ -8,12 +8,14 @@
 - Next Js
 - React Js
 - Tailwind Css
+- Oauth2
 
 ### Bibliotecas adicionais
 
 - axios
 - @radix-ui/react-toast
 - phosphor-react
+- next-auth
 
 ## Guia
 

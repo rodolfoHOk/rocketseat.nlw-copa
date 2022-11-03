@@ -7,6 +7,7 @@ import usersAvatarImage from '../assets/users-avatar-example.png';
 import iconCheckImage from '../assets/icon-check.svg';
 import { api } from '../lib/axios';
 import { Toast } from '../components/Toast';
+import { Button } from '../components/Button';
 
 interface HomeProps {
   poolCount: number;
@@ -68,12 +69,7 @@ export default function Home(props: HomeProps) {
             value={poolTitle}
             onChange={(event) => setPoolTitle(event.target.value)}
           />
-          <button
-            className="bg-yellow-500 px-6 py-4 rounded text-gray-900 font-bold text-sm uppercase hover:bg-yellow-700 transition-colors duration-200"
-            type="submit"
-          >
-            Criar meu bolão
-          </button>
+          <Button title="Criar meu bolão" type="submit" size="CONTENT" />
         </form>
 
         <p className="mt-4 text-sm text-gray-300 leading-relaxed">
