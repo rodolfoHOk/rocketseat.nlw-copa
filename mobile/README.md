@@ -47,5 +47,6 @@
 - 1: https://docs.nativebase.io/install-expo
 - 2: https://docs.expo.dev/versions/latest/sdk/auth-session
 - 3: https://docs.expo.dev/versions/latest/sdk/webbrowser
+- 4: https://reactnavigation.org/docs/getting-started/
 
-#### PlayStation, Comprometimento, Aceleracao
+#### PlayStation, Comprometimento, Aceleracao, Comunidade

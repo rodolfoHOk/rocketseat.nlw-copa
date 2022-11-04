@@ -2,6 +2,7 @@ import { Text, HStack, Box, useTheme } from 'native-base';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { ButtonIcon } from './ButtonIcon';
+import { useNavigation } from '@react-navigation/native';
 
 interface Props {
   title: string;
@@ -14,6 +15,7 @@ export function Header({
   showBackButton = false,
   showShareButton = false,
 }: Props) {
+  const { navigate } = useNavigation();
   const { colors, sizes } = useTheme();
 
   const EmptyBoxSpace = () => <Box w={6} h={6} />;
@@ -33,6 +35,7 @@ export function Header({
             icon={
               <AntDesign name="left" color={colors.gray[300]} size={sizes[6]} />
             }
+            onPress={() => navigate('polls')}
           />
         ) : (
           <EmptyBoxSpace />
