@@ -1,14 +1,26 @@
 import { FastifyInstance } from 'fastify';
-import { z } from 'zod';
-import { prisma } from '../lib/prisma';
+import { z, ZodError } from 'zod';
+import { ValidationError } from '../errors/ValidationError';
 import { authenticate } from '../plugins/authenticate';
+import { countGuessUseCase } from '../use-cases/countGuessUseCase';
+import { createGuessUseCase } from '../use-cases/createGuessUseCase';
 import { ErrorResponse } from './dto/ErrorResponse';
 
 export async function guessRoutes(fastify: FastifyInstance) {
-  fastify.get('/guesses/count', async () => {
-    const count = await prisma.guess.count();
-
-    return { count };
+  fastify.get('/guesses/count', async (request, reply) => {
+    try {
+      const count = await countGuessUseCase();
+      return reply.status(200).send(count);
+    } catch (error) {
+      console.error(error);
+      const errorResponse: ErrorResponse = {
+        status: 500,
+        type: 'Internal Server Error',
+        message:
+          'Internal Server Error. If the problem persists, contact your administrator',
+      };
+      return reply.status(500).send(errorResponse);
+    }
   });
 
   fastify.post(
@@ -21,86 +33,43 @@ export async function guessRoutes(fastify: FastifyInstance) {
         pollId: z.string(),
         gameId: z.string(),
       });
-      const { pollId, gameId } = createGuessParams.parse(request.params);
-
       const createGuessBody = z.object({
         firstTeamPoints: z.number(),
         secondTeamPoints: z.number(),
       });
-      const { firstTeamPoints, secondTeamPoints } = createGuessBody.parse(
-        request.body
-      );
+      try {
+        const { pollId, gameId } = createGuessParams.parse(request.params);
+        const { firstTeamPoints, secondTeamPoints } = createGuessBody.parse(
+          request.body
+        );
 
-      const participant = await prisma.participant.findUnique({
-        where: {
-          userId_pollId: {
-            pollId,
-            userId: request.user.sub,
-          },
-        },
-      });
-
-      if (!participant) {
-        const errorResponse: ErrorResponse = {
-          status: 400,
-          type: 'Bad Request',
-          message: 'Você não está permitido a fazer um palpite neste bolão.',
-        };
-        return reply.status(400).send(errorResponse);
-      }
-
-      let guess = await prisma.guess.findUnique({
-        where: {
-          participantId_gameId: {
-            participantId: participant.id,
-            gameId,
-          },
-        },
-      });
-
-      if (guess) {
-        const errorResponse: ErrorResponse = {
-          status: 400,
-          type: 'Bad Request',
-          message: 'Você já fez um palpite neste jogo neste bolão.',
-        };
-        return reply.status(400).send(errorResponse);
-      }
-
-      const game = await prisma.game.findUnique({
-        where: {
-          id: gameId,
-        },
-      });
-
-      if (!game) {
-        const errorResponse: ErrorResponse = {
-          status: 400,
-          type: 'Bad Request',
-          message: 'Jogo não encontrado',
-        };
-        return reply.status(400).send(errorResponse);
-      }
-
-      if (game.date < new Date()) {
-        const errorResponse: ErrorResponse = {
-          status: 400,
-          type: 'Bad Request',
-          message: 'Você não pode fazer um palpite após a data do jogo.',
-        };
-        return reply.status(400).send(errorResponse);
-      }
-
-      guess = await prisma.guess.create({
-        data: {
-          firstTeamPoints,
-          secondTeamPoints,
+        const guess = await createGuessUseCase(
+          pollId,
           gameId,
-          participantId: participant.id,
-        },
-      });
-
-      return reply.status(201).send(guess);
+          request.user.sub,
+          firstTeamPoints,
+          secondTeamPoints
+        );
+        return reply.status(201).send(guess);
+      } catch (error) {
+        if (error instanceof ZodError || error instanceof ValidationError) {
+          const errorResponse: ErrorResponse = {
+            status: 400,
+            type: 'Bad Request',
+            message: error.message,
+          };
+          return reply.status(400).send(errorResponse);
+        } else {
+          console.error(error);
+          const errorResponse: ErrorResponse = {
+            status: 500,
+            type: 'Internal Server Error',
+            message:
+              'Internal Server Error. If the problem persists, contact your administrator',
+          };
+          return reply.status(500).send(errorResponse);
+        }
+      }
     }
   );
 }

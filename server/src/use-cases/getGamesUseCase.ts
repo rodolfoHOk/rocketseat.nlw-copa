@@ -9,7 +9,7 @@ interface GameIncludeUserGuess {
   guess: Guess | null;
 }
 
-export async function getGamesIncludeUserGuessUseCase(
+export async function getGamesUseCase(
   pollId: string,
   userId: string
 ): Promise<{ games: GameIncludeUserGuess[] }> {

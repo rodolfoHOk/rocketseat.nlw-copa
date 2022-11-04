@@ -1,5 +1,6 @@
 import { JWT } from '@fastify/jwt';
 import { z } from 'zod';
+import { AuthenticationError } from '../errors/AuthenticationError';
 import { prisma } from '../lib/prisma';
 
 export async function authenticateUserUseCase(
@@ -16,6 +17,12 @@ export async function authenticateUserUseCase(
     }
   );
   const userData = await userResponse.json();
+
+  if (userData.error) {
+    throw new AuthenticationError(
+      'Google authentication error: Oauth2 token invalid or expired'
+    );
+  }
 
   const userInfoSchema = z.object({
     id: z.string(),
