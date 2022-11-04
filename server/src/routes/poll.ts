@@ -106,17 +106,6 @@ export async function pollRoutes(fastify: FastifyInstance) {
         return reply.status(400).send(errorResponse);
       }
 
-      // if (!poll.ownerId) {
-      //   await prisma.poll.update({
-      //     where: {
-      //       id: poll.id,
-      //     },
-      //     data: {
-      //       ownerId: request.user.sub,
-      //     },
-      //   });
-      // }
-
       const participant = await prisma.participant.create({
         data: {
           pollId: poll.id,
