@@ -35,3 +35,8 @@
 ## ERD
 
 ![ERD](prisma/ERD.svg)
+
+ideias:
+
+- create dto layer example: https://github.com/rodolfoHOk/rocketseat.nlw-esports/blob/main/server/src/dto/ad-dto.ts
+- and move zod validation to use case layer

@@ -50,3 +50,5 @@
 - 4: https://reactnavigation.org/docs/getting-started/
 
 #### PlayStation, Comprometimento, Aceleracao, Comunidade
+
+1:30:23

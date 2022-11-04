@@ -8,12 +8,14 @@ interface Props {
   title: string;
   showBackButton?: boolean;
   showShareButton?: boolean;
+  onShare?: () => void;
 }
 
 export function Header({
   title,
   showBackButton = false,
   showShareButton = false,
+  onShare,
 }: Props) {
   const { navigate } = useNavigation();
   const { colors, sizes } = useTheme();
@@ -59,6 +61,7 @@ export function Header({
                 size={sizes[6]}
               />
             }
+            onPress={onShare}
           />
         ) : (
           <EmptyBoxSpace />
