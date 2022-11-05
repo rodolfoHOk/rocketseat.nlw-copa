@@ -13,11 +13,16 @@
 ### Bibliotecas adicionais
 
 - @expo-google-fonts/roboto
+- @react-navigation/native
+- @react-navigation/bottom-tabs
+- axios
+- babel-plugin-inline-dotenv
+- country-list
+- dayjs
+- dotenv
 - expo-auth-session
 - expo-web-browser
-- country-list
 - react-native-country-flag
-- react-native-dotenv
 - react-native-svg-transformer
 
 ## Guia
@@ -35,6 +40,7 @@
   - Game: X (MaterialCommunityIcons window-close), Check (Octicons check)
   - Header: CaretLeft (AntDesign left), Export (MaterialCommunityIcons
     export-variant)
+  - AppRoutes: plus-circle (AntDesign pluscircleo), soccer-ball (FontAwesome soccer-ball-o)
 
 ## Links para assets, temas e componentes utilizados
 
@@ -49,6 +55,4 @@
 - 3: https://docs.expo.dev/versions/latest/sdk/webbrowser
 - 4: https://reactnavigation.org/docs/getting-started/
 
-#### PlayStation, Comprometimento, Aceleracao, Comunidade
-
-1:30:23
+PlayStation, Comprometimento, Aceleracao, Comunidade, ProximoNivel
