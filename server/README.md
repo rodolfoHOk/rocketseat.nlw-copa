@@ -2,7 +2,7 @@
 
 > Evento NLW Copa da Rocketseat - Projeto do back-end
 
-## Principais tecnologias
+## 👨‍💻 Principais Tecnologias 👩‍💻
 
 - Typescript
 - Node Js
@@ -10,12 +10,14 @@
 - Prisma
 - ERD (Entity Relationship Diagram)
 
-### Bibliotecas adicionais
+### 📚 Bibliotecas adicionais 🗃️
 
+- @fastify/cors
+- @fastify/jwt
 - short-unique-id
 - zod
 
-## Guia
+## 📃 Guia 📖
 
 - Iniciando um projeto Node: npm init -y
 - Instalando o Typescript no projeto: npm i typescript -D
@@ -32,11 +34,17 @@
 - Instalando o fastify cors: npm i @fastify/cors
 - Popular o banco de dados: npx prisma db seed
 
-## ERD
+## 🧾 ERD 🧾
 
-![ERD](prisma/ERD.svg)
+<img src="prisma/ERD.svg" width="450"/>
 
-ideias:
+## 💡 ideias 💡
 
 - create dto layer example: https://github.com/rodolfoHOk/rocketseat.nlw-esports/blob/main/server/src/dto/ad-dto.ts
 - and move zod validation to use case layer
+
+## 🔗 Links para dos projetos do evento ✨
+
+- [Projeto server](server)
+- [Projeto web](web)
+- [Projeto mobile](mobile)
