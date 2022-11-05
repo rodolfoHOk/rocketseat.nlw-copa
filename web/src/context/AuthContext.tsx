@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import { Session } from 'next-auth';
 import {
   SessionProvider,
@@ -5,7 +6,14 @@ import {
   signOut as nextAuthSignOut,
   useSession,
 } from 'next-auth/react';
-import { createContext, ReactNode, useEffect, useState } from 'react';
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
+import { api } from '../lib/api';
 
 interface User {
   id?: string;
@@ -15,7 +23,7 @@ interface User {
 }
 
 export interface AuthContextData {
-  user: User;
+  user: User | null;
   isUserLoading: boolean;
   signIn: () => Promise<void>;
   signOut: () => Promise<void>;
@@ -35,7 +43,7 @@ interface AuthContextProviderProps {
 function AuthContextProvider({ children }: AuthContextProviderProps) {
   const { data: nextAuthSessionData } = useSession();
 
-  const [user, setUser] = useState<User>({} as User);
+  const [user, setUser] = useState<User | null>(null);
   const [isUserLoading, setIsUserLoading] = useState(false);
 
   async function signIn() {
@@ -53,21 +61,44 @@ function AuthContextProvider({ children }: AuthContextProviderProps) {
   async function signOut() {
     try {
       await nextAuthSignOut();
+      setUser(null);
     } catch (error) {
       console.log(error);
       throw error;
     }
   }
 
-  async function signInWithGoogle(accessToken: string) {
-    console.log('TOKEN AUTENTICAÇÃO ===> ', accessToken);
-  }
+  const signInWithGoogle = useCallback(async (accessToken: string) => {
+    try {
+      setIsUserLoading(true);
+
+      const tokenResponse = await api.post('/users', {
+        access_token: accessToken,
+      });
+
+      api.defaults.headers.common[
+        'Authorization'
+      ] = `Bearer ${tokenResponse.data.token}`;
+
+      const userResponse = await api.get('/users/me');
+      setUser(userResponse.data.user);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        await signOut();
+        return;
+      }
+      console.log(error);
+      throw error;
+    } finally {
+      setIsUserLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (nextAuthSessionData?.accessToken) {
       signInWithGoogle(nextAuthSessionData.accessToken);
     }
-  }, [nextAuthSessionData]);
+  }, [nextAuthSessionData?.accessToken, signInWithGoogle]);
 
   return (
     <AuthContext.Provider value={{ user, isUserLoading, signIn, signOut }}>

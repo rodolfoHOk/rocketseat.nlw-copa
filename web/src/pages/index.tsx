@@ -1,21 +1,26 @@
 import { GetStaticProps } from 'next';
 import Image from 'next/image';
-import { FormEvent, useRef, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import appPreviewImage from '../assets/app-nlw-copa-preview.png';
 import logoImage from '../assets/logo.svg';
 import usersAvatarImage from '../assets/users-avatar-example.png';
 import iconCheckImage from '../assets/icon-check.svg';
-import { api } from '../lib/axios';
+import { api } from '../lib/api';
 import { Toast } from '../components/Toast';
 import { Button } from '../components/Button';
+import { useAuth } from '../hooks/useAuth';
+import { useRouter } from 'next/router';
 
-interface HomeProps {
+interface NewPollProps {
   pollCount: number;
   guessCount: number;
   userCount: number;
 }
 
-export default function Home(props: HomeProps) {
+export default function NewPoll(props: NewPollProps) {
+  const router = useRouter();
+  const { user, isUserLoading, signOut } = useAuth();
+
   const createdRef = useRef<{ publish: () => void }>();
   const errorRef = useRef<{ publish: () => void }>();
 
@@ -41,6 +46,12 @@ export default function Home(props: HomeProps) {
       errorRef.current?.publish();
     }
   }
+
+  useEffect(() => {
+    if (!isUserLoading && !user?.name) {
+      router.push('/signin');
+    }
+  }, [isUserLoading, user, router]);
 
   return (
     <div className="max-w-[1124px] h-screen mx-auto grid grid-cols-2 gap-28 items-center">
@@ -100,11 +111,16 @@ export default function Home(props: HomeProps) {
         </div>
       </main>
 
-      <Image
-        src={appPreviewImage}
-        alt="Dois celulares exibindo uma prévia da aplicação móvel da NLW Copa"
-        quality={100}
-      />
+      <div className="flex flex-col">
+        <button className="text-white self-end" onClick={signOut}>
+          SignOut
+        </button>
+        <Image
+          src={appPreviewImage}
+          alt="Dois celulares exibindo uma prévia da aplicação móvel da NLW Copa"
+          quality={100}
+        />
+      </div>
 
       <Toast
         ref={createdRef}
@@ -137,6 +153,6 @@ export const getStaticProps: GetStaticProps = async () => {
       guessCount: guessCountResponse.data.count,
       userCount: userCountResponse.data.count,
     },
-    revalidate: 10 * 60, // 10 minutes
+    revalidate: 60 * 10, // 10 minutes
   };
 };
